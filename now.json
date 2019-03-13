@@ -1,0 +1,12 @@
+{
+    "version": 2,
+    "name": "now-belajar-pwa",
+    "builds": [
+        { "src": "./index.html", "use": "@now/static" },
+        { "src": "./js/*.js", "use": "@now/static" },
+        { "src": "./image/g5.png", "use": "@now/static" },
+        { "src": "./css/*.css", "use": "@now/static" },
+        { "src": "./*.js", "use": "@now/static" }
+    ]
+
+}
