@@ -110,16 +110,36 @@ $(document).ready(function(){
     }
     $('#show-notification').on('click',function(){
         displayNotification();
-    })
+    });
+    function isOnline(){
+        var connectionStatus = $("#online-status");
+        if (navigator.onLine) {
+            connectionStatus.html = '<p>Anda Online</p>';
+        }else{
+            connectionStatus.html = '<p>Anda Offline</p>';
+        }
+    }
+    
+    window.addEventListener('online',isOnline);
+    window.addEventListener('offline',isOnline);
+    isOnline();
 });
 
 if('serviceWorker' in navigator){
     window.addEventListener('load', function(){
         navigator.serviceWorker.register('/serviceworker.js').then(
             function(reg){
-                console.log("SW success, scope:", reg.scope);
+                document.getElementById('load-in-bg')
+                .addEventListener('click',()=>{
+                    reg.sync.register('image-fetch')
+                    .then(()=>{
+                        console.log('sync-registered');
+                    }).catch((err)=>{
+                        console.log('unable to fetch image. err: ',err);
+                    })
+                })
             }, function(err){
-                console.log("Sw failed :", err);
+                console.log("Sw registration failed : ", err);
             }
         )
     })

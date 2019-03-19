@@ -18,7 +18,8 @@ self.addEventListener('install', function(event){
                     return cahce.addAll(urlToCache);
                 }
             )
-    )
+    );
+    self.skipWaiting();
 });
 
 self.addEventListener('activate', function(event){
@@ -33,6 +34,9 @@ self.addEventListener('activate', function(event){
             );
         })
     );
+    if (self.clients && clients.claim) {
+        clients.claim();
+    }
 });
 
 self.addEventListener('fetch', function (event) {
@@ -98,3 +102,22 @@ self.addEventListener('notificationclick',function (n) {
         notification.close();
     }
 });
+
+self.addEventListener('sync',(event)=>{
+    console.log('firing sync');
+        if (event.tag === 'image-fetch') {
+         console.log('sync event fired');
+         event.waitUntil(fetchImage());   
+        }
+});
+
+function fetchImage(){
+    console.log('firing fetchImage()');
+    fetch('/image/g5.png').then((response)=>{
+        return response;
+    }).then((text)=>{
+        console.log('Request success ',text);
+    }).catch((err)=>{
+        console.log('Request failed ',err);
+    });
+}
